@@ -23,7 +23,35 @@ mkdir -p ~/.claude/skills
 cp -r treg-idea-validator/skills/validar-idea ~/.claude/skills/
 ```
 
-Funciona también en Cursor, opencode o Codex: la skill es Markdown plano, cópiala en la carpeta de skills de tu agente.
+Funciona también en otros agentes — mira [OpenCode](#usar-en-opencode) abajo; en Cursor o Codex, copia la carpeta en su carpeta de skills.
+
+### Usar en OpenCode
+
+**1. Treg en OpenCode** — aquí no hay comandos `/plugin`; se hace con la CLI:
+
+```bash
+curl -fsSL https://treg.to/install.sh | sh   # instala la CLI (Python 3.12+)
+treg login                                    # inicia sesión (GitHub o email)
+treg mcp install                              # registra el MCP de treg en opencode
+```
+
+Opcional: `npx skills add superdesigndev/treg -s treg` añade además la skill general de treg (encontrar y llamar cualquier herramienta del catálogo).
+
+**2. Esta skill** — dos opciones:
+
+```bash
+# Global (todos tus proyectos)
+mkdir -p ~/.config/opencode/skills
+cp -r treg-idea-validator/skills/validar-idea ~/.config/opencode/skills/
+
+# O solo para un proyecto
+mkdir -p .opencode/skills
+cp -r treg-idea-validator/skills/validar-idea .opencode/skills/
+```
+
+Atajo: si ya la instalaste en `~/.claude/skills/`, **OpenCode la detecta automáticamente** — también lee esa carpeta.
+
+**3. Úsala**: la skill lleva `opencode/slash: "true"`, así que en la TUI tecleas `/validar-idea <tu idea>` y aparece como comando, igual que en Claude Code.
 
 ## Uso
 

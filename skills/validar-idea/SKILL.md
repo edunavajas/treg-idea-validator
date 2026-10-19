@@ -1,6 +1,8 @@
 ---
 name: validar-idea
 description: Valida una idea de producto con datos reales antes de programarla. Úsala cuando el usuario escriba /validar-idea seguido de una idea.
+metadata:
+  opencode/slash: "true"
 ---
 
 # Validar una idea de producto
