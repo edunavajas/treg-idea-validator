@@ -1,42 +1,37 @@
-# validar-idea
+# treg-idea-validator
 
-Skill de [Claude Code](https://claude.com/claude-code) que valida una idea de producto con **datos reales** antes de que programes nada: demanda en Reddit y Hacker News, competencia, reseñas negativas, quién hay detrás del competidor fuerte y volumen de búsqueda. Al final te da un veredicto: **CONSTRÚYELO, PIVOTA u OLVÍDALO**, con fuentes en cada afirmación.
+Skill de Claude Code que valida una idea de producto con **datos reales** antes de que programes nada: demanda en Reddit y Hacker News, competencia, reseñas de 1 estrella de la competencia y volumen de búsqueda. Al final, un veredicto: **CONSTRÚYELO, PIVOTA u OLVÍDALO** — con fuentes en cada afirmación.
 
-Los datos los pone [Treg](https://treg.superdesign.dev) — *"OpenRouter, but for agent tools"*. Una sola conexión y el agente accede a miles de endpoints de datos (SEO, Reddit, YouTube, App Store, enriquecimiento de empresas, keyword volume…) **pagando por llamada**, al precio del proveedor, sin suscripciones y sin que ninguna clave de API toque tu máquina.
+Los datos los pone [**Treg**](https://treg.superdesign.dev) — *"OpenRouter, but for agent tools"*. Una conexión y tu agente accede a miles de endpoints de datos (Reddit, YouTube, App Store, keyword volume, enriquecimiento de empresas…) **pagando por llamada**, al precio del proveedor, sin suscripciones y sin que ninguna clave de API toque tu máquina.
 
-## Por qué no le preguntas a un agente "a pelo"
+## Instalar
 
-Si le preguntas "¿es buena idea esto?" te dirá que sí. No tiene datos, tiene opiniones — y opiniones para quedar bien contigo. Esta skill obliga al agente a mirar **fuera**: gente real quejándose del problema, productos que ya lo resuelven y lo que esos productos hacen mal.
-
-## Requisitos
-
-- Claude Code (también funciona en Cursor, opencode, Codex… — son Markdown plano)
-- Una cuenta de Treg (nueva verificada = **$1.00 gratis** de saldo)
-
-### 1. Instala Treg en Claude Code
+**1. Treg en Claude Code** — dos comandos:
 
 ```
 /plugin marketplace add superdesigndev/treg
 /plugin install treg@treg
 ```
 
-En el primer uso, el propio agente te guía: instala la CLI (`curl -fsSL https://treg.to/install.sh | sh`), inicias sesión (`treg login`) y conecta las herramientas (`treg mcp install`). No pegas ninguna clave de API en ningún sitio: **las credenciales viven en el servidor de Treg**, y tu agente nunca las ve.
+En el primer uso, el propio agente te guía con el resto: instala la CLI (`curl -fsSL https://treg.to/install.sh | sh`), inicias sesión (`treg login`) y conecta las herramientas (`treg mcp install`). Cuenta nueva verificada = **$1.00 gratis** de saldo.
 
-### 2. Instala esta skill
+**2. Esta skill**:
 
 ```bash
-git clone https://github.com/edunavajas/validar-idea.git
+git clone https://github.com/edunavajas/treg-idea-validator.git
 mkdir -p ~/.claude/skills
-cp -r validar-idea/skills/validar-idea ~/.claude/skills/
+cp -r treg-idea-validator/skills/validar-idea ~/.claude/skills/
 ```
+
+Funciona también en Cursor, opencode o Codex: la skill es Markdown plano, cópiala en la carpeta de skills de tu agente.
 
 ## Uso
 
 ```
-/validar-idea Hytale Creators: una plataforma web para que los creadores de Hytale suban y compartan sus mapas, mods y contenido, con perfiles de creador y descargas. Público: jugadores y creadores de Hytale.
+/validar-idea Hytale Creators: una plataforma web para que los creadores de Hytale suban y compartan sus mapas, mods y contenido. Público: jugadores y creadores de Hytale.
 ```
 
-El agente no suelta una opinión: decide qué herramienta necesita para cada cosa (Reddit aquí, keyword volume allá, reseñas de la competencia aquí) y te enseña el informe completo.
+El agente no opina: decide qué herramienta necesita para cada cosa (Reddit aquí, keyword volume allá, reseñas de la competencia acullá) y te entrega un informe con veredicto y nota.
 
 ### Qué comprueba
 
@@ -53,30 +48,23 @@ El agente no suelta una opinión: decide qué herramienta necesita para cada cos
 
 ## ¿Cuánto cuesta?
 
-Se paga por llamada, en céntimos, al precio del proveedor (Treg no añade margen; su modelo es el volumen con los vendors). Una validación completa suele quedar en **unas decenas de céntimos** — la skill trae un presupuesto duro (~30 llamadas) para que no se dispare. Antes y después puedes ver el saldo y el desglose:
+Se paga por llamada, en céntimos, al precio del proveedor — [Treg](https://treg.superdesign.dev) no añade margen. Una validación completa suele quedar en **decenas de céntimos**, y la skill trae presupuesto duro (~30 llamadas) para que no se dispare:
 
 ```bash
 treg balance   # saldo y últimos cargos
 treg audit     # cada llamada: a qué fuente y cuánto costó
 ```
 
-Para comparar: hacer esto a mano son horas y varias suscripciones de herramientas de datos (Semrush $139/mo, Crunchbase $99/mo…). Aquí pagas solo lo que el agente usa.
+Para comparar: hacerlo a mano son horas y varias suscripciones mensuales (Semrush $139/mo, Crunchbase $99/mo…).
 
 ## Personalízala
 
-La skill es un archivo de Markdown: `skills/validar-idea/SKILL.md`. El criterio es tuyo y vive ahí:
+Todo el criterio vive en `skills/validar-idea/SKILL.md`: sube o baja el presupuesto de llamadas, ajusta los umbrales del veredicto o añade/quita pasos (análisis de anuncios, tendencias de YouTube…).
 
-- **Presupuesto de llamadas**: sube o baja el límite de ~30 llamadas / $0.50 en la sección *"Cómo llamar a las herramientas"*.
-- **Umbrales del veredicto**: ajusta la puntuación del paso 7 a tu barra de riesgo.
-- **Fuentes**: añade o quita pasos (p. ej. análisis de anuncios, tendencias de YouTube).
+## Créditos
 
-## Skill vs. otras
-
-- [elcodabra/validate-idea-skills](https://github.com/elcodabra/validate-idea-skills) — framework de validación en 8 pasos sin datos en vivo
-- [Vimalk0703/startup-validator-skill](https://github.com/Vimalk0703/startup-validator-skill) — investigación multi-agente con búsqueda web
-- [ruanxinyang/micro-saas-validator](https://github.com/ruanxinyang/micro-saas-validator) — GO/CAUTION/PASS con web search
-
-Este repo se diferencia en una cosa: **datos de pago reales** (volumen de búsqueda, reseñas de tiendas de apps, financiación de empresas) que la búsqueda web genérica no da, a precio por llamada.
+- [Treg](https://treg.superdesign.dev) — los datos. Open source: [superdesigndev/treg](https://github.com/superdesigndev/treg)
+- Inspirado en [elcodabra/validate-idea-skills](https://github.com/elcodabra/validate-idea-skills), [Vimalk0703/startup-validator-skill](https://github.com/Vimalk0703/startup-validator-skill) y [ruanxinyang/micro-saas-validator](https://github.com/ruanxinyang/micro-saas-validator) — este se diferencia en usar datos de pago reales, no solo web search.
 
 ## Licencia
 
